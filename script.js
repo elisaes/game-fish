@@ -8,7 +8,6 @@ const TIME_INTERVAL = 20;
 let timeBullet = 0;
 let gameRunning = true;
 
-
 class Fish {
   constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, color) {
     this.name = name;
@@ -110,39 +109,53 @@ class Fish {
   }
 }
 
-class Bullet{
-  constructor( Vo,bulletX,bulletY){
+class Bullet {
+  constructor(Vo, angle, event) {
     this.element = document.createElement("div");
     this.element.className = "bullet";
+    debugger;
     this.bulletX = event.offsetX;
     this.bulletY = event.offsetY;
-    this.element.style.left = bulletX + "px";
-    this.element.style.top = bulletY + "px";
-    this.element.style.transform = `translateZ(${bulletZ}px)`;
+    this.bulletZ = 100;
+    this.element.style.left = this.bulletX + "px";
+    this.element.style.top = this.bulletY + "px";
+    this.element.style.transform = `translateZ(${this.bulletZ}px)`;
+    this.Vo = Vo;
+    this.angle = angle;
+    document.querySelector(".content").appendChild(this.element);
 
- //Bullet movement
-function bulletMovement() {
-    Vo = 20;
-    a = 8;
+    //Bullet movement and drawing
+    function bulletMovement() {
+      const g = 9.8;
+      let deltatimeBullet = TIME_INTERVAL / 1000;
+      console.log("deltatimeBullet", deltatimeBullet);
 
+      let timeBulletMax = (this.Vo * Math.sin(this.angle)) / g;
 
-  timeBullet = TIME_INTERVAL / 1000 + timeBullet;
-  console.log("timeBullet",timeBullet)
-  bulletZ = Vo * timeBullet - 0.5 * 8 * timeBullet * timeBullet;
-  bullet.style.transform = `translateZ(${bulletZ}px)`;
-  console.log("bulletZ",bulletZ);
- }
+      for (let i = 0; i < timeBulletMax; i = deltatimeBullet) {
+        this.element.style.left = this.bulletX + "px";
+
+        this.bulletY =
+        this.bulletY + Vo * Math.sin(angle) * i - 0.5 * g * i * i;
+        this.element.style.top = this.bulletY + "px";
+
+        this.bulletZ = this.bulletZ + Vo * Math.cos(angle) * i;
+        this.element.style.transform = `translateZ(${this.bulletZ}px)`;
+      }
+    }
+  }
+  updateBullet() {
+    this.bulletMovement();
   }
 }
 //Shooting the fishes
 function shoot(event) {
-
-  
-  
-  document.querySelector(".content").appendChild(bullet);
-   
+  let newBullet = new Bullet(20, 0.5, event);
 }
 document.querySelector("body").addEventListener("click", shoot);
+
+//fish Parameters
+
 const speedArr = [5, 1, -2, -3, 0.5];
 const colorArr = ["red", "antiquewhite", "pink", "cyan", "gold"];
 
@@ -173,12 +186,11 @@ setInterval(() => {
     eggArr.forEach((egg) => {
       egg.update();
       egg.draw();
-      bulletMovement();
+      Bullet.updateBullet();
+      Bullet.bulletMovement();
     });
   }
 }, TIME_INTERVAL);
-
-
 
 function stop() {
   if (gameRunning === true) {
