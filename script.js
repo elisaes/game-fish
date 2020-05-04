@@ -1,32 +1,39 @@
-const WINDOWINNERWIDTH = document.querySelector("#content").offsetWidth;
+const WINDOWINNERWIDTH = document.querySelector(".content").offsetWidth;
 console.log(WINDOWINNERWIDTH);
-const WINDOWINNERHEIGHT = document.querySelector("#content").offsetHeight;
+const WINDOWINNERHEIGHT = document.querySelector(".content").offsetHeight;
 console.log(WINDOWINNERHEIGHT);
+const WINDOWINNERDEPT = document.querySelector(".bottom").offsetHeight;
+console.log(WINDOWINNERDEPT);
 const TIME_INTERVAL = 20;
-
+let timeBullet = 0;
 let gameRunning = true;
 
+
 class Fish {
-  constructor(name, x, y, deltaX, deltaY, directiony, t, color) {
+  constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, color) {
     this.name = name;
     this.x = x;
     this.y = y;
+    this.z = z;
     this.t = t;
     this.behaviour = "sin"; // this can be sin, cos , tan
     this.directiony = directiony;
     this.deltaX = deltaX;
     this.deltaY = deltaY;
+    this.deltaZ = deltaZ;
     this.color = color;
 
     this.element = document.createElement("div");
     this.element.className = "fish";
     this.element.style.left = this.x + "px";
     this.element.style.top = this.y + "px";
+    this.element.style.dept = this.z + "px";
     this.element.style.backgroundColor = this.color;
-    document.querySelector("#content").appendChild(this.element);
+    document.querySelector(".content").appendChild(this.element);
 
     this.chooseBehavior();
   }
+
   // Drawing the movement in css
   draw() {
     this.element.style.left = this.x + "px";
@@ -36,107 +43,65 @@ class Fish {
     this.element.style.top = this.y + "px";
     let drawy = this.element.style.top;
     //console.log("drawy: ", drawy);
+    this.element.style.transform = `translateZ(${this.z}px)`;
   }
-  // Logic of the movement y(x,t)= (A) amplitud maxima * sin(Numero de onda * x * frecuencia angular * t(tiempo en s) + angulo de fase); k=(2pi/longitud de onda)
 
-  movementPattern() {
-    if (this.behaviour === "sin") {
-      let A = 20;
-      //console.log("deltaX", this.deltaX);
-      //console.log("deltaY: ", this.deltaY);
-      let yNumber =
-        A * Math.sin(0.05 * this.x - 0.5 * this.t + 1) + this.deltaY;
-      //console.log("this.t: ", this.t / 1000);
-      let xNumber = this.x + this.deltaX;
-
-      this.x = xNumber;
-      this.y = yNumber;
-      //console.log("x: " + xNumber, "y: " + yNumber);
-
-      //If the egg goes out of the width of the window in x
-      if (this.x > WINDOWINNERWIDTH) {
-        this.deltaX = -this.deltaX;
-      }
-      if (this.x < 0) {
-        this.deltaX = -this.deltaX;
-      }
-      //If the egg goes out of the width of the window in y
-      if (this.y < 0) {
-        this.directiony = -this.directiony;
-      }
-      if (this.y > WINDOWINNERHEIGHT) {
-        console.log("changing,direction", this);
-        this.directiony = -Math.abs(this.directiony);
-      }
-      this.deltaY = this.deltaY + this.directiony;
-    } else if (this.behaviour === "cos") {
-      let A = 20;
-      //console.log("deltaX", this.deltaX);
-      //console.log("deltaY: ", this.deltaY);
-      let yNumber =
-        A * Math.cos(0.05 * this.x - 0.5 * this.t + 1) + this.deltaY;
-      //console.log("this.t: ", this.t / 1000);
-      let xNumber = this.x + this.deltaX;
-
-      this.x = xNumber;
-      this.y = yNumber;
-      //console.log("x: " + xNumber, "y: " + yNumber);
-
-      //If the egg goes out of the width of the window in x
-      if (this.x > WINDOWINNERWIDTH) {
-        this.deltaX = -this.deltaX;
-      }
-      if (this.x < 0) {
-        this.deltaX = -this.deltaX;
-      }
-      //If the egg goes out of the width of the window in y
-      if (this.y < 0) {
-        this.directiony = -this.directiony;
-      }
-      if (this.y > WINDOWINNERHEIGHT) {
-        console.log("changing,direction", this);
-        this.directiony = -Math.abs(this.directiony);
-      }
-      this.deltaY = this.deltaY + this.directiony;
-    } else if (this.behaviour === "tan") {
-      let A = 20;
-      //console.log("deltaX", this.deltaX);
-      //console.log("deltaY: ", this.deltaY);
-      let yNumber =
-        A * Math.tan(0.05 * this.x - 0.5 * this.t + 1) + this.deltaY;
-      //console.log("this.t: ", this.t / 1000);
-      let xNumber = this.x + this.deltaX;
-
-      this.x = xNumber;
-      this.y = yNumber;
-      //console.log("x: " + xNumber, "y: " + yNumber);
-
-      //If the egg goes out of the width of the window in x
-      if (this.x > WINDOWINNERWIDTH) {
-        this.deltaX = -this.deltaX;
-      }
-      if (this.x < 0) {
-        this.deltaX = -this.deltaX;
-      }
-      //If the egg goes out of the width of the window in y
-      if (this.y < 0) {
-        this.directiony = -this.directiony;
-      }
-      if (this.y > WINDOWINNERHEIGHT) {
-        console.log("changing,direction", this);
-        this.directiony = -Math.abs(this.directiony);
-      }
-      this.deltaY = this.deltaY + this.directiony;
+  //setting the behavior in the fish
+  chooseBehavior() {
+    if (Math.random() < 0.5) {
+      this.behaviour = "sin";
+    }
+    if (Math.random() > 0.5) {
+      this.behaviour = "cos";
     }
   }
 
-  chooseBehavior() {
-    if (Math.random() < 0.33) {
-      this.behaviour = "sin";
-    } else if (Math.random() < 0.66) {
-      this.behaviour = "cos";
-    } else {
-      this.behaviour = "tan";
+  // Logic of the movement y(x,t)= (A) amplitud maxima * sin(Numero de onda * x * frecuencia angular * t(tiempo en s) + angulo de fase); k=(2pi/longitud de onda)
+  movementPattern() {
+    //movement in x
+    let xNumber = this.x + this.deltaX;
+    this.x = xNumber;
+
+    //movement in y
+    //console.log(this.behaviour);
+    let A = 40;
+    let yNumber =
+      A * Math[this.behaviour](0.05 * this.x - 0.5 * this.t + 1) + this.deltaY;
+    this.y = yNumber;
+    this.deltaY = this.deltaY + this.directiony;
+    //console.log("this.y", this.y);
+
+    //movement in z
+    let zNumber = this.z - this.deltaZ;
+    this.z = zNumber;
+    //console.log("this.z", this.z);
+
+    //If the egg goes out of the width of the window in x
+    if (this.x > WINDOWINNERWIDTH) {
+      this.deltaX = -this.deltaX;
+    }
+    if (this.x < 0) {
+      this.deltaX = -this.deltaX;
+    }
+
+    //If the egg goes out of the width of the window in y
+    if (this.y < 0) {
+      this.directiony = Math.abs(this.directiony);
+    }
+    if (this.y > WINDOWINNERHEIGHT) {
+      //console.log("changing,direction", this);
+      this.directiony = -Math.abs(this.directiony);
+    }
+
+    //If the egg goes out of the width of the window in z
+    //Front trasnlate z=100; total dept=400(300 in the back;100 in the front)
+    if (this.z < -300) {
+      this.deltaZ = -this.deltaZ;
+      this.element.style.backgroundColor = "black";
+    }
+    if (this.z > 100) {
+      this.element.style.backgroundColor = "red";
+      this.deltaZ = -this.deltaZ;
     }
   }
 
@@ -145,6 +110,39 @@ class Fish {
   }
 }
 
+class Bullet{
+  constructor( Vo,bulletX,bulletY){
+    this.element = document.createElement("div");
+    this.element.className = "bullet";
+    this.bulletX = event.offsetX;
+    this.bulletY = event.offsetY;
+    this.element.style.left = bulletX + "px";
+    this.element.style.top = bulletY + "px";
+    this.element.style.transform = `translateZ(${bulletZ}px)`;
+
+ //Bullet movement
+function bulletMovement() {
+    Vo = 20;
+    a = 8;
+
+
+  timeBullet = TIME_INTERVAL / 1000 + timeBullet;
+  console.log("timeBullet",timeBullet)
+  bulletZ = Vo * timeBullet - 0.5 * 8 * timeBullet * timeBullet;
+  bullet.style.transform = `translateZ(${bulletZ}px)`;
+  console.log("bulletZ",bulletZ);
+ }
+  }
+}
+//Shooting the fishes
+function shoot(event) {
+
+  
+  
+  document.querySelector(".content").appendChild(bullet);
+   
+}
+document.querySelector("body").addEventListener("click", shoot);
 const speedArr = [5, 1, -2, -3, 0.5];
 const colorArr = ["red", "antiquewhite", "pink", "cyan", "gold"];
 
@@ -158,13 +156,15 @@ for (let i = 0; i < 5; i++) {
     i,
     WINDOWINNERWIDTH / 2,
     WINDOWINNERHEIGHT / 2,
+    -200,
     speedArr[i],
     speedArr[i],
+    1,
     directionyArr[i],
     20 + 100 * i,
     colorArr[i]
   );
-  console.log(newEgg);
+  // console.log(newEgg);
   eggArr.push(newEgg);
 }
 
@@ -173,9 +173,12 @@ setInterval(() => {
     eggArr.forEach((egg) => {
       egg.update();
       egg.draw();
+      bulletMovement();
     });
   }
 }, TIME_INTERVAL);
+
+
 
 function stop() {
   if (gameRunning === true) {
