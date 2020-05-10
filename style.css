@@ -5,28 +5,32 @@
   width: 50px;
   height: 50px;
   position: absolute;
-  top: 500px;
-  left: 500px;
+  
 }
-.shadow{
-  color: rgb(87, 82, 77);
+.shadow {
+  background-color: rgb(87, 82, 77);
   border: 1px solid black;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  border-radius: 70%;
+  width: 60px;
+  height: 40px;
   position: absolute;
-  top: 500px;
-  left: 500px;
+
+}
+.shadowBullet {
+  background-color: rgb(87, 82, 77);
+  border: 1px solid black;
+  width: 5px;
+  height: 10px;
+  position: absolute;
+ 
 }
 .bullet {
-  color: black;
+  background-color: black;
   border: 1px solid black;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 5px;
+  height: 100px;
+  /* border-radius: 50%; */
   position: absolute;
-  top: 500px;
-  left: 500px;
 }
 .bigContainer {
   perspective: 400px;
@@ -37,21 +41,21 @@
   position: absolute;
   width: 800px;
   height: 500px;
-  /* background-color: red;
-  opacity: 0.1; */
+  background-color: red;
+  opacity: 0.1; 
   transform-style: preserve-3d;
-  transform: translateZ(200px);
+  /* 
+  transform: translateZ(200px); */
 }
 .content {
   position: relative;
-    width: 800px;
-    margin: auto;
-    top: 200px;
-    height: 500px;
-    transform-style: preserve-3d;
-    transform: translateZ(0px);
+  width: 800px;
+  margin: auto;
+  top: 200px;
+  height: 500px;
+  transform-style: preserve-3d;
+  transform: translateZ(0px);
 }
-
 
 .back {
   position: absolute;
@@ -88,7 +92,6 @@
   height: 400px;
   transform: rotateX(-90deg) translateY(-100px);
   transform-origin: top center;
-  
 }
 .bottom {
   position: absolute;
@@ -115,7 +118,6 @@
   width: 800px;
   height: 500px;
   transform: translateZ(100px);
-
 }
 .bullet {
   color: black;

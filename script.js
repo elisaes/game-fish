@@ -130,12 +130,22 @@ class Bullet {
     this.bulletX = event.offsetX;
     this.bulletY = event.offsetY;
     this.bulletZ = 200;
-    // console.log("bulletx", this.bulletX);
-    // console.log("bullety", this.bulletY);
-    // console.log("bulletz", this.bulletZ);
+    console.log("event bulletz",event.offsetZ );
     this.element.style.left = this.bulletX + "px";
     this.element.style.top = this.bulletY + "px";
     this.element.style.transform = `translateZ(${this.bulletZ}px)`;
+
+    this.shadowBullet = document.createElement('div');
+    this.shadowBullet.className = "shadowBullet";
+    this.ShadowBulletX = this.bulletX
+    this.ShadowBulletY = 500;
+    this.ShadowBulletZ = 200;
+    
+    this.shadowBullet.style.left = this.bulletX  + "px";
+    this.shadowBullet.style.top = 500 + "px";
+    this.shadowBullet.style.transform = `translateZ(${this.bulletZ}px)`;
+    document.querySelector(".content").appendChild(this.shadowBullet);
+    
     this.Vo = Vo;
     this.angle = angle;
     document.querySelector(".content").appendChild(this.element);
@@ -160,10 +170,14 @@ class Bullet {
 
     this.bulletZ =
       this.bulletZ - this.Vo * Math.cos(this.angle) * deltatimeBullet;
+      console.log("this.bulletZ", this.bulletZ);
     this.element.style.transform = `translateZ(${this.bulletZ}px)`;
+    this.shadowBullet.style.transform = `translateZ(${this.bulletZ}px)`;
+    console.log( "shadowbulletz", `translateZ(${this.bulletZ}px)`)
    
     if (this.bulletZ < -500) {
       this.element.remove();
+      this.shadowBullet.remove();
       bulletArr.shift();
    
     }
