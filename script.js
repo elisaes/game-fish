@@ -11,9 +11,9 @@ let gameRunning = true;
 class Fish {
   constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, color) {
     this.name = name;
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
     // console.log("fishx", x);
     // console.log("fishx", y);
     // console.log("fishx", z);
@@ -108,11 +108,11 @@ class Fish {
 
     //If the egg goes out of the width of the window in z
     //Front trasnlate z=100; total dept=400(300 in the back;100 in the front)
-    if (this.z < -400) {
+    if (this.z < -500) {
       this.deltaZ = -this.deltaZ;
       this.element.style.backgroundColor = "black";
     }
-    if (this.z > 100) {
+    if (this.z > 0) {
       this.element.style.backgroundColor = "red";
       this.deltaZ = -this.deltaZ;
     }
@@ -129,7 +129,7 @@ class Bullet {
     this.element.className = "bullet";
     this.bulletX = event.offsetX;
     this.bulletY = event.offsetY;
-    this.bulletZ = 200;
+    this.bulletZ = 0;
     console.log("event bulletz",event.offsetZ );
     this.element.style.left = this.bulletX + "px";
     this.element.style.top = this.bulletY + "px";
@@ -139,7 +139,7 @@ class Bullet {
     this.shadowBullet.className = "shadowBullet";
     this.ShadowBulletX = this.bulletX
     this.ShadowBulletY = 500;
-    this.ShadowBulletZ = 200;
+    this.ShadowBulletZ = 0;
     
     this.shadowBullet.style.left = this.bulletX  + "px";
     this.shadowBullet.style.top = 500 + "px";
@@ -212,7 +212,7 @@ class Bullet {
 const bulletArr = [];
 
 function shoot(event) {
-  let newBullet = new Bullet(100, 0.1, event);
+  let newBullet = new Bullet(200, 0.1, event);
   bulletArr.push(newBullet);
 
   console.log("bullet", bulletArr, newBullet);
@@ -253,7 +253,7 @@ setInterval(() => {
       egg.update();
       egg.draw();
     });
-    bulletArr.forEach((bullet, idx) => {
+    bulletArr.forEach((bullet) => {
       bullet.updateBullet();
       bullet.bulletMovement();
     });

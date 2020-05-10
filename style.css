@@ -28,7 +28,7 @@
   background-color: black;
   border: 1px solid black;
   width: 5px;
-  height: 100px;
+  height: 10px;
   /* border-radius: 50%; */
   position: absolute;
 }
@@ -61,7 +61,7 @@
   position: absolute;
   width: 800px;
   height: 500px;
-  transform: translateZ(-300px) rotateY(180deg);
+  transform: translateZ(-400px) rotateY(180deg);
   background-color: rgb(127, 178, 255);
   opacity: 0.3;
 }
@@ -70,7 +70,7 @@
   left: 400px;
   width: 400px;
   height: 500px;
-  transform: rotateY(-270deg) translateX(300px);
+  transform: rotateY(-270deg) translateX(400px);
   transform-origin: top right;
   background-color: rgb(127, 255, 206);
   opacity: 0.3;
@@ -80,7 +80,7 @@
 
   width: 400px;
   height: 500px;
-  transform: rotateY(270deg) translateX(-300px);
+  transform: rotateY(270deg) translateX(-400px);
   transform-origin: center left;
   background-color: rgb(127, 255, 159);
   opacity: 0.3;
@@ -90,7 +90,7 @@
 
   width: 800px;
   height: 400px;
-  transform: rotateX(-90deg) translateY(-100px);
+  transform: rotateX(-90deg) translateY(0px);
   transform-origin: top center;
 }
 .bottom {
@@ -98,7 +98,7 @@
   top: 100px;
   width: 800px;
   height: 400px;
-  transform: rotateX(90deg) translateY(100px);
+  transform: rotateX(90deg) translateY(0px);
   transform-origin: bottom center;
   background-color: aquamarine;
   opacity: 0.3;
@@ -117,16 +117,9 @@
   position: absolute;
   width: 800px;
   height: 500px;
-  transform: translateZ(100px);
+  transform: translateZ(0px);
 }
-.bullet {
-  color: black;
-  border: 1px solid black;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-}
+
 #button {
   background-color: purple;
   border: 1px solid black;
