@@ -9,22 +9,21 @@ let timeBullet = 0;
 let gameRunning = true;
 
 class Fish {
-  constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, color) {
+  constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, maxFront, maxDepth) {
     this.name = name;
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
-    // console.log("fishx", x);
-    // console.log("fishx", y);
-    // console.log("fishx", z);
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.maxFront = maxFront;
+    this.maxDepth = maxDepth;
+
 
     this.t = t;
-    this.behaviour = "sin"; // this can be sin, cos , tan
+    this.behaviour = "sin"; // this can be sin, cos,
     this.directiony = directiony;
     this.deltaX = deltaX;
     this.deltaY = deltaY;
     this.deltaZ = deltaZ;
-    this.color = color;
     this.shadow = document.createElement('div');
     this.shadow.className = "shadow";
     this.shadow.style.left = this.x + "px";
@@ -39,7 +38,6 @@ class Fish {
     this.element.style.left = this.x + "px";
     this.element.style.top = this.y + "px";
     this.element.style.dept = this.z + "px";
-    this.element.style.backgroundColor = this.color;
     document.querySelector(".content").appendChild(this.element);
 
     this.chooseBehavior();
@@ -48,13 +46,12 @@ class Fish {
   // Drawing the movement in css
   draw() {
     this.element.style.left = this.x + "px";
-    this.shadow.style.left = this.x + "px"
-    let drawx = this.element.style.left;
-    //console.log("drawx: ", drawx);
+    this.shadow.style.left = this.x + "px";
+ 
 
     this.element.style.top = this.y + "px";
-    let drawy = this.element.style.top;
-    //console.log("drawy: ", drawy);
+
+
     this.element.style.transform = `translateZ(${this.z}px)`;
     this.shadow.style.transform = `translateZ(${this.z}px)`;
   }
@@ -71,24 +68,18 @@ class Fish {
 
   // Logic of the movement y(x,t)= (A) amplitud maxima * sin(Numero de onda * x * frecuencia angular * t(tiempo en s) + angulo de fase); k=(2pi/longitud de onda)
   movementPattern() {
-    //movement in x
-    let xNumber = this.x + this.deltaX;
-    this.x = xNumber;
-
-    //movement in y
-    //console.log(this.behaviour);
+   
+    this.x = this.x + this.deltaX;
+        
     let A = 40;
-    let yNumber =
+    this.y =
       A * Math[this.behaviour](0.05 * this.x - 0.5 * this.t + 1) + this.deltaY;
-    this.y = yNumber;
-    this.deltaY = this.deltaY + this.directiony;
-    //console.log("this.y", this.y);
-
-    //movement in z
-    let zNumber = this.z - this.deltaZ;
-    this.z = zNumber;
-    //console.log("this.z", this.z);
-
+     this.deltaY = this.deltaY + this.directiony;
+    
+    
+     this.z = this.z - this.deltaZ;
+     
+  
     //If the egg goes out of the width of the window in x
     if (this.x > WINDOWINNERWIDTH) {
       this.deltaX = -this.deltaX;
@@ -102,17 +93,15 @@ class Fish {
       this.directiony = Math.abs(this.directiony);
     }
     if (this.y > WINDOWINNERHEIGHT) {
-      //console.log("changing,direction", this);
       this.directiony = -Math.abs(this.directiony);
     }
 
-    //If the egg goes out of the width of the window in z
-    //Front trasnlate z=100; total dept=400(300 in the back;100 in the front)
-    if (this.z < -500) {
+    //If the egg goes out of the width of the window in z; Front trasnlate  total dept=-500
+    if (this.z < this.maxDepth) {
       this.deltaZ = -this.deltaZ;
       this.element.style.backgroundColor = "black";
     }
-    if (this.z > 0) {
+    if (this.z > this.maxFront) {
       this.element.style.backgroundColor = "red";
       this.deltaZ = -this.deltaZ;
     }
@@ -123,6 +112,28 @@ class Fish {
   }
 }
 
+class Shark extends Fish{
+constructor(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, maxFront, maxDepth){
+  super(name, x, y, z, deltaX, deltaY, deltaZ, directiony, t, maxFront, maxDepth)
+}
+movementPattern() {
+  let A = 50;
+
+  this.x = A * Math(sin)(0.05 * this.x - 0.5 * this.t + 1) + this.deltaX;
+
+
+
+  this.y = this.y + this.deltaY
+  
+
+
+
+}
+
+
+}
+
+
 class Bullet {
   constructor(Vo, angle, event) {
     this.element = document.createElement("div");
@@ -130,7 +141,7 @@ class Bullet {
     this.bulletX = event.offsetX;
     this.bulletY = event.offsetY;
     this.bulletZ = 0;
-    console.log("event bulletz",event.offsetZ );
+    
     this.element.style.left = this.bulletX + "px";
     this.element.style.top = this.bulletY + "px";
     this.element.style.transform = `translateZ(${this.bulletZ}px)`;
@@ -156,24 +167,24 @@ class Bullet {
     let deltatimeBullet = TIME_INTERVAL / 1000;
 
     let timeBulletMax = (this.Vo * Math.sin(this.angle)) / g;
-    //console.log("dtimeBulletMax", timeBulletMax);
+   
 
     this.element.style.left = this.bulletX + "px";
-    //console.log("this.bullet x", this.bulletX);
+
 
     this.bulletY =
       this.bulletY -
       this.Vo * Math.sin(this.angle) * deltatimeBullet -
       0.5 * g * deltatimeBullet * deltatimeBullet;
     this.element.style.top = this.bulletY + "px";
-    //console.log("this.bullet y", this.bulletY);
+  
 
     this.bulletZ =
       this.bulletZ - this.Vo * Math.cos(this.angle) * deltatimeBullet;
-      console.log("this.bulletZ", this.bulletZ);
+     
     this.element.style.transform = `translateZ(${this.bulletZ}px)`;
     this.shadowBullet.style.transform = `translateZ(${this.bulletZ}px)`;
-    console.log( "shadowbulletz", `translateZ(${this.bulletZ}px)`)
+    
    
     if (this.bulletZ < -500) {
       this.element.remove();
@@ -212,7 +223,7 @@ class Bullet {
 const bulletArr = [];
 
 function shoot(event) {
-  let newBullet = new Bullet(200, 0.1, event);
+  let newBullet = new Bullet(100, 0.1, event);
   bulletArr.push(newBullet);
 
   console.log("bullet", bulletArr, newBullet);
@@ -222,26 +233,36 @@ document.querySelector(".content").addEventListener("click", shoot);
 //fish Parameters
 
 const speedArr = [5, 1, -2, -3, 0.5];
-const colorArr = ["red", "antiquewhite", "pink", "cyan", "gold"];
-
 const directionyArr = [1, -1, 1, -0.5, -2];
 
 // Drawing the fishes
 const eggArr = [];
-//console.log("fish", eggArr);
+
 //Calling the eggs.
 for (let i = 0; i < 3; i++) {
   let newEgg = new Fish(
+    //name
     i,
+    //x
     WINDOWINNERWIDTH / 2,
+    //y
     WINDOWINNERHEIGHT / 2,
+    //z
     -200,
+    //deltaX
     speedArr[i],
+    //deltaY
     speedArr[i],
+    //deltaZ
     1,
+    //direction
     directionyArr[i],
+    //t:time
     20 + 100 * i,
-    colorArr[i]
+    //maxFront
+    0,
+    //maxDepth
+    -500
   );
   // console.log(newEgg);
   eggArr.push(newEgg);
@@ -253,7 +274,7 @@ setInterval(() => {
       egg.update();
       egg.draw();
     });
-    bulletArr.forEach((bullet) => {
+    bulletArr.forEach((bullet, idx) => {
       bullet.updateBullet();
       bullet.bulletMovement();
     });
