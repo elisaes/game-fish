@@ -116,6 +116,7 @@ class Fish {
 
   update() {
     this.movementPattern();
+
   }
 }
 
@@ -166,9 +167,11 @@ class Shark extends Fish {
     this.z = this.z + this.deltaZ;
 
 
-    
-   
-    for (let bullet of Object.values(bulletsUsed)){
+        // LOOPING OBJ
+        //console.log("Object.values(bulletsUsed)", Object.values(bulletsUsed));
+     
+    for ( let i = 0; i< Object.values(bulletsUsed).length; i ++){
+      let bullet = Object.values(bulletsUsed)[i];
       
       let sharkRadio = this.element.offsetWidth / 2;
       
@@ -178,11 +181,15 @@ class Shark extends Fish {
         bullet.bulletZ - this.z < sharkRadio
       ) {
         this.sharkLife = this.sharkLife - 1;
+        delete bulletsUsed[bullet.id];
+        document.getElementById([bullet.id]).remove();
+        document.getElementById([bullet.shadowBullet.id]).remove();
       }
       console.log("sharkLife", this.sharkLife);
       if (this.sharkLife === 0) {
           this.element.remove();
           this.shadow.remove();
+          
           sharkArr.pop();
       }
       
@@ -203,6 +210,7 @@ class Bullet {
     this.id = id;
     this.element = document.createElement("div");
     this.element.className = "bullet";
+    this.element.id = id;
     this.bulletX = event.offsetX;
     this.bulletY = event.offsetY;
     this.bulletZ = 0;
@@ -213,6 +221,7 @@ class Bullet {
 
     this.shadowBullet = document.createElement("div");
     this.shadowBullet.className = "shadowBullet";
+    this.shadowBullet.id = id;
     this.ShadowBulletX = this.bulletX;
     this.ShadowBulletY = 500;
     this.ShadowBulletZ = 0;
@@ -226,6 +235,7 @@ class Bullet {
     this.angle = angle;
     document.querySelector(".content").appendChild(this.element);
   }
+  
   //Bullet movement and drawing
   bulletMovement() {
     const g = 10;
@@ -251,8 +261,8 @@ class Bullet {
       this.element.remove();
       this.shadowBullet.remove();
       delete bulletsUsed[this.id];
-      console.log("HERE",bulletsUsed)
-      console.log("i am this", bulletsUsed[this.id])
+      // console.log("HERE",bulletsUsed)
+      // console.log("i am this", bulletsUsed[this.id])
     }
 
     for (let i = 0; i < eggArr.length; i++) {
@@ -269,7 +279,7 @@ class Bullet {
       ) {
         alert("Shooting");
         eggArr.splice(i, 1);
-        bulletArr.splice(i, 1);
+        //bulletArr.splice(i, 1);
       }
     }
   }
@@ -291,7 +301,7 @@ function shoot(event) {
   bulletsUsed[bulletId] = newBullet;
 }
 document.querySelector(".content").addEventListener("click", shoot);
-console.log('bulletsUsed', bulletsUsed);
+//console.log('bulletsUsed', bulletsUsed);
 
 //Calling the eggs.
 //fish Parameters
@@ -338,7 +348,7 @@ setInterval(() => {
     
     for (let bullet of Object.values(bulletsUsed)){
 
-      console.log("IN SINDE CLOOPS", bullet)
+      //console.log("IN SINDE CLOOPS", bullet)
       bullet.updateBullet();
       bullet.bulletMovement();
     }
