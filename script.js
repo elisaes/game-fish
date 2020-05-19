@@ -11,7 +11,7 @@ let bulletNo = 0;
 
 class Fish {
   constructor(
-    name,
+    id,
     x,
     y,
     z,
@@ -23,8 +23,10 @@ class Fish {
     maxFront,
     maxDepth
   ) {
-    this.name = name;
+    this.id = id;
+    console.log("fishid", this.id);
     this.x = x;
+    console.log("fishx", this.x);
     this.y = y;
     this.z = z;
     this.maxFront = maxFront;
@@ -38,6 +40,7 @@ class Fish {
     this.deltaZ = deltaZ;
     this.shadow = document.createElement("div");
     this.shadow.className = "shadow";
+    this.shadow.id = id;
     this.shadow.style.left = this.x + "px";
     this.shadow.style.top = 500 + "px";
     this.shadow.style.transform = `translateZ(${this.z}px)`;
@@ -46,6 +49,7 @@ class Fish {
 
     this.element = document.createElement("div");
     this.element.className = "fish";
+    this.element.id = id;
     this.element.style.left = this.x + "px";
     this.element.style.top = this.y + "px";
     this.element.style.transform = `translateZ(${this.z}px)`;
@@ -158,9 +162,9 @@ class Shark extends Fish {
   }
 
   movementPattern() {
-    let A = 400;
+    let A = 10;
 
-    this.x = this.x;
+    this.x = A * Math.sin(0.05 * this.z - 0.5 * this.t + 1) + this.x;
 
     this.y = this.y;
 
@@ -175,11 +179,14 @@ class Shark extends Fish {
       
       let sharkRadio = this.element.offsetWidth / 2;
       
+      
+
       if (
-        bullet.bulletX - this.x < sharkRadio &&
-        bullet.bulletY - this.y < sharkRadio &&
-        bullet.bulletZ - this.z < sharkRadio
+        Math.abs(bullet.bulletX - this.x) < sharkRadio &&
+        Math.abs(bullet.bulletY - this.y) < sharkRadio &&
+        Math.abs(bullet.bulletZ - this.z) < sharkRadio
       ) {
+        
         this.sharkLife = this.sharkLife - 1;
         delete bulletsUsed[bullet.id];
         document.getElementById([bullet.id]).remove();
@@ -261,25 +268,30 @@ class Bullet {
       this.element.remove();
       this.shadowBullet.remove();
       delete bulletsUsed[this.id];
-      // console.log("HERE",bulletsUsed)
-      // console.log("i am this", bulletsUsed[this.id])
+
     }
 
-    for (let i = 0; i < eggArr.length; i++) {
-      let fishRadio = document.querySelectorAll(".fish")[i].offsetWidth / 2;
-
+    let fishArr = Object.values(fishCreated);
+    
+    for (let i = 0; i < fishArr.length; i++) {
+      let fishRadio = document.getElementById([i]).offsetWidth / 2;
+    
       let bulletRadio = this.element.offsetWidth / 2;
 
       let contactRadio = fishRadio + bulletRadio;
 
       if (
-        Math.abs(this.bulletX - eggArr[i].x) < contactRadio &&
-        Math.abs(this.bulletY - eggArr[i].y) < contactRadio &&
-        Math.abs(this.bulletZ - eggArr[i].z) < contactRadio
+        Math.abs(this.bulletX - fishArr[i].x) < contactRadio &&
+        Math.abs(this.bulletY - fishArr[i].y) < contactRadio &&
+        Math.abs(this.bulletZ - fishArr[i].z) < contactRadio
       ) {
-        alert("Shooting");
-        eggArr.splice(i, 1);
-        //bulletArr.splice(i, 1);
+        this.element.remove();
+        delete bulletsUsed[this.id];
+        this.shadowBullet.remove();
+        fishCreated[fishArr[i].id].shadow.remove();
+        fishCreated[fishArr[i].id].element.remove();
+        delete fishCreated[fishArr[i].id];
+     
       }
     }
   }
@@ -288,10 +300,17 @@ class Bullet {
     this.bulletMovement();
   }
 }
-//Shooting the fishes
-const bulletsUsed = {
-};
 
+//objects of game components
+const bulletsUsed = {};
+const fishCreated ={};
+const sharkArr = [];
+
+
+
+
+
+//Shooting the fishes
 
 function shoot(event) {
  let bulletId = bulletNo;
@@ -301,16 +320,17 @@ function shoot(event) {
   bulletsUsed[bulletId] = newBullet;
 }
 document.querySelector(".content").addEventListener("click", shoot);
-//console.log('bulletsUsed', bulletsUsed);
+
 
 //Calling the eggs.
 //fish Parameters
 const speedArr = [5, 1, -2, -3, 0.5];
 const directionyArr = [1, -1, 1, -0.5, -2];
-const eggArr = [];
+
+
 for (let i = 0; i < 3; i++) {
-  let newEgg = new Fish(
-    //name
+  let newFish = new Fish(
+    //id
     i,
     //x
     0,
@@ -333,17 +353,19 @@ for (let i = 0; i < 3; i++) {
     //maxDepth
     -500
   );
-  eggArr.push(newEgg);
+
+  fishCreated[newFish.id] = newFish;
 }
-const sharkArr = [];
+
+
 
 setInterval(() => {
   if (gameRunning) {
-    
+    let fishArr = Object.values(fishCreated);
 
-    eggArr.forEach((egg) => {
-      egg.update();
-      egg.draw();
+    fishArr.forEach((fish) => {
+      fish.update();
+      fish.draw();
     });
     
     for (let bullet of Object.values(bulletsUsed)){
