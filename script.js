@@ -126,7 +126,7 @@ class Fish {
 
 class Shark extends Fish {
   constructor(
-    name,
+    id,
     x,
     y,
     z,
@@ -140,7 +140,7 @@ class Shark extends Fish {
     sharkLife
   ) {
     super(
-      name,
+      id,
       x,
       y,
       z,
@@ -152,6 +152,7 @@ class Shark extends Fish {
       maxFront,
       maxDepth
     );
+    console.log("this,id(shark)", this.id);
     this.element.className = "shark";
 
     this.shadow.className = "shadowShark";
@@ -192,22 +193,21 @@ class Shark extends Fish {
         document.getElementById([bullet.id]).remove();
         document.getElementById([bullet.shadowBullet.id]).remove();
       }
-      console.log("sharkLife", this.sharkLife);
       if (this.sharkLife === 0) {
           this.element.remove();
           this.shadow.remove();
-          
-          sharkArr.pop();
+          delete sharkCreated[this.id];
       }
-      
-
-
-
     }
+   
 
-    if (this.z > 200) {
+    if (sharkCreated[this.id]  && sharkCreated[this.id].z > 200) {
       alert("Game Over you have been eaten!!");
       gameRunning = false;
+      console.log("sharkCreated",sharkCreated);
+      console.log("sharkCreated[this.id]", sharkCreated[this.id]);
+      console.log("sharkCreated[this.id].z", sharkCreated[this.id].z);
+
     }
   }
 }
@@ -274,7 +274,7 @@ class Bullet {
     let fishArr = Object.values(fishCreated);
     
     for (let i = 0; i < fishArr.length; i++) {
-      let fishRadio = document.getElementById([i]).offsetWidth / 2;
+      let fishRadio = fishCreated[fishArr[i].id].element.offsetWidth / 2;
     
       let bulletRadio = this.element.offsetWidth / 2;
 
@@ -304,7 +304,7 @@ class Bullet {
 //objects of game components
 const bulletsUsed = {};
 const fishCreated ={};
-const sharkArr = [];
+const sharkCreated = {};
 
 
 
@@ -322,7 +322,7 @@ function shoot(event) {
 document.querySelector(".content").addEventListener("click", shoot);
 
 
-//Calling the eggs.
+//Calling the fishes.
 //fish Parameters
 const speedArr = [5, 1, -2, -3, 0.5];
 const directionyArr = [1, -1, 1, -0.5, -2];
@@ -374,6 +374,7 @@ setInterval(() => {
       bullet.updateBullet();
       bullet.bulletMovement();
     }
+    let sharkArr = Object.values(sharkCreated);
     sharkArr.forEach((shark) => {
       shark.update();
       shark.draw();
@@ -381,7 +382,6 @@ setInterval(() => {
     timeForShark = timeForShark + 1;
 
     if (timeForShark === 20) {
-      //  timeForShark = 0;
 
       for (let i = 0; i < 1; i++) {
         let newShark = new Shark(
@@ -409,7 +409,7 @@ setInterval(() => {
           -500,
           3
         );
-        sharkArr.push(newShark);
+        sharkCreated[i] = newShark
       }
     }
   }
