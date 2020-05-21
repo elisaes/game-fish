@@ -120,7 +120,6 @@ class Fish {
 
   update() {
     this.movementPattern();
-
   }
 }
 
@@ -159,7 +158,6 @@ class Shark extends Fish {
     this.sharkLife = sharkLife;
 
     document.querySelector(".content").appendChild(this.shadow);
-    
   }
 
   movementPattern() {
@@ -171,49 +169,43 @@ class Shark extends Fish {
 
     this.z = this.z + this.deltaZ;
 
+    // LOOPING OBJ
+    //console.log("Object.values(bulletsUsed)", Object.values(bulletsUsed));
 
-        // LOOPING OBJ
-        //console.log("Object.values(bulletsUsed)", Object.values(bulletsUsed));
-     
-    for ( let i = 0; i< Object.values(bulletsUsed).length; i ++){
+    for (let i = 0; i < Object.values(bulletsUsed).length; i++) {
       let bullet = Object.values(bulletsUsed)[i];
-      
+
       let sharkRadio = this.element.offsetWidth / 2;
-      
-      
 
       if (
         Math.abs(bullet.bulletX - this.x) < sharkRadio &&
         Math.abs(bullet.bulletY - this.y) < sharkRadio &&
         Math.abs(bullet.bulletZ - this.z) < sharkRadio
       ) {
-        
         this.sharkLife = this.sharkLife - 1;
         delete bulletsUsed[bullet.id];
         document.getElementById([bullet.id]).remove();
         document.getElementById([bullet.shadowBullet.id]).remove();
       }
       if (this.sharkLife === 0) {
-          this.element.remove();
-          this.shadow.remove();
-          delete sharkCreated[this.id];
+        this.element.remove();
+        this.shadow.remove();
+        delete sharkCreated[this.id];
       }
     }
-   
 
-    if (sharkCreated[this.id]  && sharkCreated[this.id].z > 200) {
+    if (sharkCreated[this.id] && sharkCreated[this.id].z > 200) {
       alert("Game Over you have been eaten!!");
       gameRunning = false;
-      console.log("sharkCreated",sharkCreated);
+      console.log("sharkCreated", sharkCreated);
       console.log("sharkCreated[this.id]", sharkCreated[this.id]);
       console.log("sharkCreated[this.id].z", sharkCreated[this.id].z);
-
     }
   }
 }
 
 class Bullet {
-  constructor(id,Vo, angle, event) {
+  constructor(id, Vo, angle, event) {
     this.id = id;
     this.element = document.createElement("div");
     this.element.className = "bullet";
@@ -242,7 +234,7 @@ class Bullet {
     this.angle = angle;
     document.querySelector(".content").appendChild(this.element);
   }
-  
+
   //Bullet movement and drawing
   bulletMovement() {
     const g = 10;
@@ -268,14 +260,13 @@ class Bullet {
       this.element.remove();
       this.shadowBullet.remove();
       delete bulletsUsed[this.id];
-
     }
 
     let fishArr = Object.values(fishCreated);
-    
+
     for (let i = 0; i < fishArr.length; i++) {
       let fishRadio = fishCreated[fishArr[i].id].element.offsetWidth / 2;
-    
+
       let bulletRadio = this.element.offsetWidth / 2;
 
       let contactRadio = fishRadio + bulletRadio;
@@ -291,7 +282,6 @@ class Bullet {
         fishCreated[fishArr[i].id].shadow.remove();
         fishCreated[fishArr[i].id].element.remove();
         delete fishCreated[fishArr[i].id];
-     
       }
     }
   }
@@ -303,30 +293,24 @@ class Bullet {
 
 //objects of game components
 const bulletsUsed = {};
-const fishCreated ={};
+const fishCreated = {};
 const sharkCreated = {};
-
-
-
-
 
 //Shooting the fishes
 
 function shoot(event) {
- let bulletId = bulletNo;
-  let newBullet = new Bullet(bulletId,100, 0.1, event);
+  let bulletId = bulletNo;
+  let newBullet = new Bullet(bulletId, 100, 0.1, event);
   bulletNo = bulletNo + 1;
 
   bulletsUsed[bulletId] = newBullet;
 }
 document.querySelector(".content").addEventListener("click", shoot);
 
-
 //Calling the fishes.
 //fish Parameters
 const speedArr = [5, 1, -2, -3, 0.5];
 const directionyArr = [1, -1, 1, -0.5, -2];
-
 
 for (let i = 0; i < 3; i++) {
   let newFish = new Fish(
@@ -357,8 +341,6 @@ for (let i = 0; i < 3; i++) {
   fishCreated[newFish.id] = newFish;
 }
 
-
-
 setInterval(() => {
   if (gameRunning) {
     let fishArr = Object.values(fishCreated);
@@ -367,9 +349,8 @@ setInterval(() => {
       fish.update();
       fish.draw();
     });
-    
-    for (let bullet of Object.values(bulletsUsed)){
 
+    for (let bullet of Object.values(bulletsUsed)) {
       //console.log("IN SINDE CLOOPS", bullet)
       bullet.updateBullet();
       bullet.bulletMovement();
@@ -382,7 +363,6 @@ setInterval(() => {
     timeForShark = timeForShark + 1;
 
     if (timeForShark === 20) {
-
       for (let i = 0; i < 1; i++) {
         let newShark = new Shark(
           //name
@@ -422,5 +402,5 @@ function stop() {
     gameRunning = true;
   }
 }
-
 document.querySelector("#stop").addEventListener("click", stop);
+
