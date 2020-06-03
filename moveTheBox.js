@@ -24,3 +24,13 @@ document.addEventListener("mousemove", moveTheBox);
 //   boxContainer.style.left = mouseX-300+"px";
 
 // }
+//movimiento parabolico en y
+this.bulletY =
+this.bulletY -
+this.Vo * Math.sin(this.angle) * deltatimeBullet -
+0.5 * g * deltatimeBullet * deltatimeBullet;
+this.element.style.top = this.bulletY + "px";
+
+
+
+Math.abs( Math.asin(this.bulletX/this.bulletZ));

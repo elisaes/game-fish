@@ -1,7 +1,10 @@
 .fish {
-  background-color: orange;
-  border: 1px solid black;
-  border-radius: 50%;
+  
+ background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  
   width: 50px;
   height: 50px;
   position: absolute;
@@ -11,27 +14,29 @@
   background-color: rgb(87, 82, 77);
   border: 1px solid black;
   border-radius: 70%;
-  width: 60px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   position: absolute;
-
+  transform-origin: top;
 }
-.shark{
-  background-color: blue;
+.shadowShark{
+  background-color: rgb(87, 82, 77);
   border: 1px solid black;
-  border-radius: 50%;
+  border-radius: 70%;
   width: 70px;
   height: 70px;
   position: absolute;
+  transform-origin: top;
 }
-.shadowShark{
-  background-color: blue;
-  border: 1px solid black;
-  border-radius: 80%;
-  width: 70px;
-  height: 50px;
+.shark{
+  background-size:cover;
+  background-position: center;
+ 
+  width: 100px;
+  height: 100px;
   position: absolute;
 }
+
 .shadowBullet {
   background-color: rgb(87, 82, 77);
   border: 1px solid black;
@@ -48,6 +53,10 @@
   /* border-radius: 50%; */
   position: absolute;
 }
+.ornament{
+  position: absolute;
+  background-size: cover;
+}
 .bigContainer {
   perspective: 200px;
   perspective-origin: 50% 100%;
@@ -57,11 +66,9 @@
   position: absolute;
   width: 800px;
   height: 500px;
-  background-color: red;
   opacity: 0.1; 
   transform-style: preserve-3d;
-  /* 
-  transform: translateZ(200px); */
+  transform: translateZ(200px);
 }
 .content {
   position: relative;
@@ -78,7 +85,6 @@
   width: 800px;
   height: 500px;
   transform: translateZ(-400px) rotateY(180deg);
-  background-color: rgb(127, 178, 255);
   opacity: 0.3;
 }
 .right {
@@ -88,22 +94,26 @@
   height: 500px;
   transform: rotateY(-270deg) translateX(400px);
   transform-origin: top right;
-  background-color: rgb(127, 255, 206);
   opacity: 0.3;
 }
 .left {
   position: absolute;
-
   width: 400px;
   height: 500px;
   transform: rotateY(270deg) translateX(-400px);
   transform-origin: center left;
-  background-color: rgb(127, 255, 159);
-  opacity: 0.3;
+  /* background-image: url("frontCoral.png"); */
+  background-size: 100%;
+  background-position-x: center;
+  
+  background-repeat: no-repeat;
+  
 }
 .top {
   position: absolute;
-
+  background-image: url("sky underwater.jpg");
+  opacity: 0.5;
+  background-size: cover;
   width: 800px;
   height: 400px;
   transform: rotateX(-90deg) translateY(0px);
@@ -116,17 +126,16 @@
   height: 400px;
   transform: rotateX(90deg) translateY(0px);
   transform-origin: bottom center;
-  background-color: aquamarine;
-  opacity: 0.3;
-  border: 3px solid black;
-  display: inline-grid;
-  grid-template-columns: auto auto auto;
+  background-image: url("beach.jpg");
+  background-size: cover;
+  background-position:center;
+  border: solid black;
+  display:grid;
 }
-.grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  font-size: 30px;
-  text-align: center;
+#bottom1 {
+
+  position:absolute;
+
 }
 
 .front {
@@ -134,6 +143,11 @@
   width: 800px;
   height: 500px;
   transform: translateZ(0px);
+  border: solid black;
+  background-image: url("ocean.jpg");
+  background-size: cover;
+  background-position:center;
+  opacity: 0.235;
 }
 
 #button {
